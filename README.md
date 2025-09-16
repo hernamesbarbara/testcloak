@@ -23,13 +23,23 @@ pip install -e .
 
 ## Usage
 
+### Basic Usage (Default Redaction)
 ```bash
 python pii-cloak mask --infile data/pdf/email.pdf --output-format markdown --outdir data/md/
 ```
 
+### With Replacement Strategy
+```bash
+python pii-cloak mask --infile data/pdf/email.pdf --output-format markdown --outdir data/md/ --strategy replace
+```
+
+### Available Strategies
+- `redact` (default): Replaces PII with static placeholders like `[NAME]`, `[EMAIL]`, `[DATE]`
+- `replace`: Replaces PII with masked characters (currently uses asterisks)
+
 ## Example Output
 
-The script processes PDF documents and produces both masked and unmasked versions. Here's an example showing the same email in both forms:
+The script processes PDF documents and produces masked and unmasked versions. Here's the same email shown with different masking strategies:
 
 ### Unmasked Document
 
@@ -61,10 +71,10 @@ PS - here are the remaining 3 birthdays you asked for :)
 | Green     | Marjorie     | 1958-04-21  |
 ```
 
-### Masked Document
+### Masked Document (Redact Strategy)
 
 ```markdown
-# Masked Document
+# Masked Document (Strategy: redact)
 
 **Entities Found:** 11
 **Entities Masked:** 11
@@ -89,29 +99,46 @@ Cameron
 
 PS - here are the remaining [DATE] you asked for :)
 
-surname
+| surname   | first name   | birthdate   |
+|-----------|--------------|-------------|
+| White     | Johnson      | [DATE]      |
+| Borden    | Ashley       | [DATE]      |
+| Green     | Marjorie     | [DATE]      |
+```
 
-first name
+### Masked Document (Replace Strategy)
 
-birthdate
+```markdown
+# Masked Document (Strategy: replace)
 
-White
+**Entities Found:** 11
+**Entities Masked:** 11
 
-Johnson
+---------- Forwarded message ----------
 
-[DATE]
+From: ***************** <*******************>
 
-[DATE]
+Date: ************************* at ************
 
-[DATE]
+Subject: Re: FYI emailing with from inness robins
 
-[DATE]
+To: *************** <*********************>
 
-Green
+Hi ******,
 
-Marjorie
+I'd definitely like to meet Inness if you think she'd be open to meeting! Thanks so so much for pounding the pavement so much for me here.
 
-[DATE]
+Best,
+
+Cameron
+
+PS - here are the remaining *********** you asked for :)
+
+| surname   | first name   | birthdate        |
+|-----------|--------------|------------------|
+| White     | Johnson      | **********       |
+| Borden    | Ashley       | **********       |
+| Green     | Marjorie     | **********       |
 ```
 
 ## What Gets Masked
@@ -127,10 +154,17 @@ The tool automatically detects and masks:
 
 ## Output Files
 
-The script generates three files:
+The script generates three files per strategy:
+
+### Default (Redact) Strategy:
 - `{filename}.unmasked.md` - Original content in markdown format
 - `{filename}.masked.md` - Content with PII replaced by placeholders
 - `{filename}.cloakmap.json` - Detailed mapping of all masked entities
+
+### Replace Strategy:
+- `{filename}.unmasked.md` - Original content in markdown format (same as above)
+- `{filename}.masked.replace.md` - Content with PII replaced by asterisks
+- `{filename}.cloakmap.replace.json` - Detailed mapping with replacement metadata
 
 ## Dependencies
 
@@ -138,6 +172,10 @@ The script generates three files:
 - [DocPivot](https://github.com/hernamesbarbara/docpivot) - Document processing pipeline
 - [CloakPivot](https://github.com/hernamesbarbara/cloakpivot) - PII detection and masking
 - [Presidio](https://github.com/microsoft/presidio) - PII detection engine (via CloakPivot)
+
+## Known Limitations
+
+- The `replace` strategy currently uses asterisks instead of realistic fake data due to a limitation in the CloakPivot/Presidio integration. Future versions may support realistic fake data generation using libraries like Faker.
 
 ## License
 

@@ -1,0 +1,296 @@
+{
+  "version": "2.0",
+  "doc_id": "email",
+  "doc_hash": "1fb80276a738778e07ce293452b5bda085018cffd066e77c35582fff3b02f1bb",
+  "anchors": [
+    {
+      "node_id": "#/texts/0",
+      "start": 564,
+      "end": 574,
+      "entity_type": "DATE_TIME",
+      "confidence": 0.85,
+      "masked_value": "**********",
+      "replacement_id": "repl_32e02a19551e",
+      "original_checksum": "2e7ee10885fb3319a5ab6cfdc83bf2fbb04d8228eba5deeda6538f40086ccd93",
+      "checksum_salt": "Ss1/6ifaf84=",
+      "strategy_used": "surrogate",
+      "timestamp": "2025-09-16T17:39:51.267230+00:00",
+      "metadata": {
+        "original_text": "1958-04-21",
+        "presidio_operator": "surrogate"
+      }
+    },
+    {
+      "node_id": "#/texts/0",
+      "start": 535,
+      "end": 545,
+      "entity_type": "DATE_TIME",
+      "confidence": 0.85,
+      "masked_value": "**********",
+      "replacement_id": "repl_88bdc4f80184",
+      "original_checksum": "7803704f7b8a16ae2cc4c2719ba35a6e865f6fd961ebb22d645242afedc5159b",
+      "checksum_salt": "jxnOgaxOEhw=",
+      "strategy_used": "surrogate",
+      "timestamp": "2025-09-16T17:39:51.267258+00:00",
+      "metadata": {
+        "original_text": "1944-12-22",
+        "presidio_operator": "surrogate"
+      }
+    },
+    {
+      "node_id": "#/texts/0",
+      "start": 507,
+      "end": 533,
+      "entity_type": "DATE_TIME",
+      "confidence": 0.85,
+      "masked_value": "**************************",
+      "replacement_id": "repl_d4bd5ce86ae1",
+      "original_checksum": "38907ee4aaaafba5f9fa7113e183e9778ce23bbcaaddc7b5a1d6dcbf9b30ed2a",
+      "checksum_salt": "xqILWHIO3z0=",
+      "strategy_used": "surrogate",
+      "timestamp": "2025-09-16T17:39:51.267280+00:00",
+      "metadata": {
+        "original_text": "1958-04-21\n\nBorden\n\nAshley",
+        "presidio_operator": "surrogate"
+      }
+    },
+    {
+      "node_id": "#/texts/0",
+      "start": 429,
+      "end": 440,
+      "entity_type": "DATE_TIME",
+      "confidence": 0.85,
+      "masked_value": "***********",
+      "replacement_id": "repl_9bc87fe7d626",
+      "original_checksum": "0539313e47459081edb1eb1afb2efec77bf88fea543904d960e495ce0482e28a",
+      "checksum_salt": "40uwlPpSbZ8=",
+      "strategy_used": "surrogate",
+      "timestamp": "2025-09-16T17:39:51.267296+00:00",
+      "metadata": {
+        "original_text": "3 birthdays",
+        "presidio_operator": "surrogate"
+      }
+    },
+    {
+      "node_id": "#/texts/0",
+      "start": 236,
+      "end": 242,
+      "entity_type": "PERSON",
+      "confidence": 0.85,
+      "masked_value": "******",
+      "replacement_id": "repl_3b35b31f8f50",
+      "original_checksum": "8b8a5e190a0690239846140b48f9057924f4fb7667200c318ddee78ef42ab209",
+      "checksum_salt": "g5e1oTyyiFE=",
+      "strategy_used": "surrogate",
+      "timestamp": "2025-09-16T17:39:51.267312+00:00",
+      "metadata": {
+        "original_text": "Julian",
+        "presidio_operator": "surrogate"
+      }
+    },
+    {
+      "node_id": "#/texts/0",
+      "start": 209,
+      "end": 230,
+      "entity_type": "EMAIL_ADDRESS",
+      "confidence": 1.0,
+      "masked_value": "*********************",
+      "replacement_id": "repl_15564c30a127",
+      "original_checksum": "76b4fd65990da7b9271bfd17176ea71f77b4474bb0adee311ad8c881a091e7ef",
+      "checksum_salt": "Et93t0q5rbc=",
+      "strategy_used": "surrogate",
+      "timestamp": "2025-09-16T17:39:51.267327+00:00",
+      "metadata": {
+        "original_text": "jmargaret@company.com",
+        "presidio_operator": "surrogate"
+      }
+    },
+    {
+      "node_id": "#/texts/0",
+      "start": 192,
+      "end": 207,
+      "entity_type": "PERSON",
+      "confidence": 0.85,
+      "masked_value": "***************",
+      "replacement_id": "repl_3a58fc2916b7",
+      "original_checksum": "427aca4733866d2c79ad475dd9eba33ef0e2f629b380685a7e510ac2e64fb3dd",
+      "checksum_salt": "mJLLzLxYPIM=",
+      "strategy_used": "surrogate",
+      "timestamp": "2025-09-16T17:39:51.267345+00:00",
+      "metadata": {
+        "original_text": "Julian Margaret",
+        "presidio_operator": "surrogate"
+      }
+    },
+    {
+      "node_id": "#/texts/0",
+      "start": 123,
+      "end": 135,
+      "entity_type": "DATE_TIME",
+      "confidence": 0.85,
+      "masked_value": "************",
+      "replacement_id": "repl_0d01ed092491",
+      "original_checksum": "d55953725652a4bc9a9eeec70128870af3d5fdc5e2fb7341e5720edd44b094f1",
+      "checksum_salt": "JpCZ7Kb7Y64=",
+      "strategy_used": "surrogate",
+      "timestamp": "2025-09-16T17:39:51.267370+00:00",
+      "metadata": {
+        "original_text": "12:19 PM EDT",
+        "presidio_operator": "surrogate"
+      }
+    },
+    {
+      "node_id": "#/texts/0",
+      "start": 94,
+      "end": 119,
+      "entity_type": "DATE_TIME",
+      "confidence": 0.85,
+      "masked_value": "*************************",
+      "replacement_id": "repl_3aba11792e1d",
+      "original_checksum": "e01e02d02609e582b0d2aa9f651fdeff414eca9275d85cf8dfcb0ec479be3039",
+      "checksum_salt": "ibbGrkijNFo=",
+      "strategy_used": "surrogate",
+      "timestamp": "2025-09-16T17:39:51.267385+00:00",
+      "metadata": {
+        "original_text": "Tuesday, September 2 2025",
+        "presidio_operator": "surrogate"
+      }
+    },
+    {
+      "node_id": "#/texts/0",
+      "start": 66,
+      "end": 85,
+      "entity_type": "EMAIL_ADDRESS",
+      "confidence": 1.0,
+      "masked_value": "*******************",
+      "replacement_id": "repl_00ba764607cf",
+      "original_checksum": "31c6e045917fde9427e52c584c6f0fae24d3d79231f0873334202bf31ec27720",
+      "checksum_salt": "cj+bEF+uGOU=",
+      "strategy_used": "surrogate",
+      "timestamp": "2025-09-16T17:39:51.267400+00:00",
+      "metadata": {
+        "original_text": "cameron@example.com",
+        "presidio_operator": "surrogate"
+      }
+    },
+    {
+      "node_id": "#/texts/0",
+      "start": 47,
+      "end": 64,
+      "entity_type": "PERSON",
+      "confidence": 0.85,
+      "masked_value": "*****************",
+      "replacement_id": "repl_1b20935529ca",
+      "original_checksum": "609335cb435afab1cf66f90c9e6ea6ac7941ea76e4a834758d85fbb1ad27846e",
+      "checksum_salt": "SU/deiGpGT8=",
+      "strategy_used": "surrogate",
+      "timestamp": "2025-09-16T17:39:51.267414+00:00",
+      "metadata": {
+        "original_text": "Cameron MacIntyre",
+        "presidio_operator": "surrogate"
+      }
+    }
+  ],
+  "policy_snapshot": {
+    "default_strategy": {
+      "kind": "surrogate",
+      "parameters": {}
+    },
+    "per_entity": {},
+    "thresholds": {},
+    "locale": "en",
+    "seed": "testcloak-consistent-seed",
+    "allow_list": [],
+    "deny_list": [],
+    "context_rules": {},
+    "min_entity_length": 1,
+    "privacy_level": "medium"
+  },
+  "crypto": null,
+  "signature": null,
+  "created_at": "2025-09-16T17:39:51.267844+00:00",
+  "metadata": {},
+  "presidio_metadata": {
+    "operator_results": [
+      {
+        "entity_type": "DATE_TIME",
+        "start": 564,
+        "end": 574,
+        "operator": "surrogate",
+        "text": "**********"
+      },
+      {
+        "entity_type": "DATE_TIME",
+        "start": 535,
+        "end": 545,
+        "operator": "surrogate",
+        "text": "**********"
+      },
+      {
+        "entity_type": "DATE_TIME",
+        "start": 507,
+        "end": 533,
+        "operator": "surrogate",
+        "text": "**************************"
+      },
+      {
+        "entity_type": "DATE_TIME",
+        "start": 429,
+        "end": 440,
+        "operator": "surrogate",
+        "text": "***********"
+      },
+      {
+        "entity_type": "PERSON",
+        "start": 236,
+        "end": 242,
+        "operator": "surrogate",
+        "text": "******"
+      },
+      {
+        "entity_type": "EMAIL_ADDRESS",
+        "start": 209,
+        "end": 230,
+        "operator": "surrogate",
+        "text": "*********************"
+      },
+      {
+        "entity_type": "PERSON",
+        "start": 192,
+        "end": 207,
+        "operator": "surrogate",
+        "text": "***************"
+      },
+      {
+        "entity_type": "DATE_TIME",
+        "start": 123,
+        "end": 135,
+        "operator": "surrogate",
+        "text": "************"
+      },
+      {
+        "entity_type": "DATE_TIME",
+        "start": 94,
+        "end": 119,
+        "operator": "surrogate",
+        "text": "*************************"
+      },
+      {
+        "entity_type": "EMAIL_ADDRESS",
+        "start": 66,
+        "end": 85,
+        "operator": "surrogate",
+        "text": "*******************"
+      },
+      {
+        "entity_type": "PERSON",
+        "start": 47,
+        "end": 64,
+        "operator": "surrogate",
+        "text": "*****************"
+      }
+    ],
+    "reversible_operators": [],
+    "engine_version": "2.x.x"
+  }
+}

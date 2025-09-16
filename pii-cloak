@@ -3,7 +3,7 @@
 PII Cloak - Mask personally identifiable information in PDF documents
 
 Usage:
-    pii-cloak mask --infile=<path> --output-format=<format> --outdir=<dir>
+    pii-cloak mask --infile=<path> --output-format=<format> --outdir=<dir> [--strategy=<strategy>]
     pii-cloak -h | --help
     pii-cloak --version
 
@@ -13,9 +13,11 @@ Options:
     --infile=<path>            Path to the input PDF file
     --output-format=<format>    Output format (currently only 'markdown' is supported)
     --outdir=<dir>             Directory to save output files
+    --strategy=<strategy>       Masking strategy: 'redact' (default) or 'replace' [default: redact]
 
 Examples:
     pii-cloak mask --infile data/pdf/email.pdf --output-format markdown --outdir data/md/
+    pii-cloak mask --infile data/pdf/email.pdf --output-format markdown --outdir data/md/ --strategy replace
 """
 
 import os
@@ -24,10 +26,12 @@ from pathlib import Path
 from docopt import docopt
 from docling.document_converter import DocumentConverter
 from cloakpivot import CloakEngine
+from cloakpivot.core.policies import MaskingPolicy
+from cloakpivot.core.strategies import Strategy, StrategyKind
 
 __version__ = "0.1.0"
 
-def process_pdf(infile, output_format, outdir):
+def process_pdf(infile, output_format, outdir, strategy="redact"):
     """Process a PDF file to detect and mask PII."""
 
     infile_path = Path(infile)
@@ -47,6 +51,7 @@ def process_pdf(infile, output_format, outdir):
 
     print(f"Processing: {infile}")
     print(f"Output directory: {outdir}")
+    print(f"Strategy: {strategy}")
 
     print("\n1. Converting PDF to DoclingDocument...")
     converter = DocumentConverter()
@@ -55,7 +60,42 @@ def process_pdf(infile, output_format, outdir):
     print(f"   ✓ PDF converted successfully")
 
     print("\n2. Detecting and masking PII...")
-    cloak_engine = CloakEngine()
+
+    # Configure masking policy based on strategy
+    if strategy == "replace":
+        # Use surrogate strategy for realistic fake data
+        policy = MaskingPolicy(
+            default_strategy=Strategy(
+                kind=StrategyKind.SURROGATE,
+                parameters={}
+            ),
+            seed="testcloak-consistent-seed"  # For reproducibility
+        )
+        cloak_engine = CloakEngine(default_policy=policy)
+    else:
+        # Default redact strategy with static placeholders
+        policy = MaskingPolicy(
+            default_strategy=Strategy(
+                kind=StrategyKind.TEMPLATE,
+                parameters={"template": "[REDACTED]"}
+            )
+        )
+        # Configure specific entity templates
+        policy = policy.with_entity_strategy("EMAIL_ADDRESS",
+            Strategy(kind=StrategyKind.TEMPLATE, parameters={"template": "[EMAIL]"}))
+        policy = policy.with_entity_strategy("PERSON",
+            Strategy(kind=StrategyKind.TEMPLATE, parameters={"template": "[NAME]"}))
+        policy = policy.with_entity_strategy("DATE_TIME",
+            Strategy(kind=StrategyKind.TEMPLATE, parameters={"template": "[DATE]"}))
+        policy = policy.with_entity_strategy("PHONE_NUMBER",
+            Strategy(kind=StrategyKind.TEMPLATE, parameters={"template": "[PHONE]"}))
+        policy = policy.with_entity_strategy("LOCATION",
+            Strategy(kind=StrategyKind.TEMPLATE, parameters={"template": "[LOCATION]"}))
+        policy = policy.with_entity_strategy("CREDIT_CARD",
+            Strategy(kind=StrategyKind.TEMPLATE, parameters={"template": "[CARD-****]"}))
+
+        cloak_engine = CloakEngine(default_policy=policy)
+
     mask_result = cloak_engine.mask_document(docling_doc)
 
     entities_found = mask_result.entities_found
@@ -79,7 +119,7 @@ def process_pdf(infile, output_format, outdir):
 
         # If export is empty, try alternative approach
         if not masked_md and hasattr(masked_doc, 'texts') and masked_doc.texts:
-            masked_md = "# Masked Document\n\n"
+            masked_md = f"# Masked Document (Strategy: {strategy})\n\n"
             masked_md += f"**Entities Found:** {entities_found}\n"
             masked_md += f"**Entities Masked:** {entities_masked}\n\n"
 
@@ -93,17 +133,25 @@ def process_pdf(infile, output_format, outdir):
                     if hasattr(table, 'to_markdown'):
                         masked_md += "\n" + table.to_markdown() + "\n"
     else:
-        masked_md = f"# Masked Document\n\n"
+        masked_md = f"# Masked Document (Strategy: {strategy})\n\n"
         masked_md += f"**Entities Found:** {entities_found}\n"
         masked_md += f"**Entities Masked:** {entities_masked}\n\n"
         masked_md += "*Masked document export not available*\n"
 
-    masked_path = outdir_path / f"{base_name}.masked.md"
+    # Create strategy-specific filename if not default
+    if strategy == "replace":
+        masked_path = outdir_path / f"{base_name}.masked.replace.md"
+    else:
+        masked_path = outdir_path / f"{base_name}.masked.md"
     with open(masked_path, 'w') as f:
         f.write(masked_md)
     print(f"   ✓ Saved masked document: {masked_path}")
 
-    cloakmap_path = outdir_path / f"{base_name}.cloakmap.json"
+    # Create strategy-specific cloakmap filename if not default
+    if strategy == "replace":
+        cloakmap_path = outdir_path / f"{base_name}.cloakmap.replace.json"
+    else:
+        cloakmap_path = outdir_path / f"{base_name}.cloakmap.json"
     if cloakmap:
         try:
             if hasattr(cloakmap, 'to_dict'):
@@ -135,10 +183,16 @@ def main():
 
     if arguments['mask']:
         try:
+            strategy = arguments.get('--strategy', 'redact')
+            if strategy not in ['redact', 'replace']:
+                print(f"\n❌ Error: Invalid strategy '{strategy}'. Choose 'redact' or 'replace'.")
+                return 1
+
             process_pdf(
                 infile=arguments['--infile'],
                 output_format=arguments['--output-format'],
-                outdir=arguments['--outdir']
+                outdir=arguments['--outdir'],
+                strategy=strategy
             )
         except Exception as e:
             print(f"\n❌ Error: {e}")
