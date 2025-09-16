@@ -40,7 +40,14 @@ python pii-cloak mask \
   --strategy replace
 ```
 
-> 📄 **Sample File**: The examples above use [`data/pdf/email.pdf`](data/pdf/email.pdf) - a test document containing various PII types including names, emails, dates, and a table with personal information. (Right-click → "Open in new tab" to view alongside the README)
+> 📄 **Sample File**: 
+
+The following code samples test PII masking with a mock email that contains realistic PII data:
+- [`data/pdf/email.pdf`](data/pdf/email.pdf)
+
+The sample email contains names, emails, dates, and a table with personal information.
+
+![Sample Email PDF Screenshot](data/pdf/email-screenshot.png)
 
 ### Available Strategies
 - `redact` (default): Replaces PII with static placeholders like `[NAME]`, `[EMAIL]`, `[DATE]`
