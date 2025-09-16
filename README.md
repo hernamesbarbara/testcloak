@@ -25,13 +25,22 @@ pip install -e .
 
 ### Basic Usage (Default Redaction)
 ```bash
-python pii-cloak mask --infile data/pdf/email.pdf --output-format markdown --outdir data/md/
+python pii-cloak mask \
+  --infile data/pdf/email.pdf \
+  --output-format markdown \
+  --outdir data/md/
 ```
 
 ### With Replacement Strategy
 ```bash
-python pii-cloak mask --infile data/pdf/email.pdf --output-format markdown --outdir data/md/ --strategy replace
+python pii-cloak mask \
+  --infile data/pdf/email.pdf \
+  --output-format markdown \
+  --outdir data/md/ \
+  --strategy replace
 ```
+
+> 📄 **Sample File**: The examples above use [`data/pdf/email.pdf`](data/pdf/email.pdf) - a test document containing various PII types including names, emails, dates, and a table with personal information.
 
 ### Available Strategies
 - `redact` (default): Replaces PII with static placeholders like `[NAME]`, `[EMAIL]`, `[DATE]`
