@@ -1,0 +1,150 @@
+#!/usr/bin/env python
+"""
+PII Cloak - Mask personally identifiable information in PDF documents
+
+Usage:
+    pii-cloak mask --infile=<path> --output-format=<format> --outdir=<dir>
+    pii-cloak -h | --help
+    pii-cloak --version
+
+Options:
+    -h --help                   Show this screen
+    --version                   Show version
+    --infile=<path>            Path to the input PDF file
+    --output-format=<format>    Output format (currently only 'markdown' is supported)
+    --outdir=<dir>             Directory to save output files
+
+Examples:
+    pii-cloak mask --infile data/pdf/email.pdf --output-format markdown --outdir data/md/
+"""
+
+import os
+import json
+from pathlib import Path
+from docopt import docopt
+from docling.document_converter import DocumentConverter
+from cloakpivot import CloakEngine
+
+__version__ = "0.1.0"
+
+def process_pdf(infile, output_format, outdir):
+    """Process a PDF file to detect and mask PII."""
+
+    infile_path = Path(infile)
+    if not infile_path.exists():
+        raise FileNotFoundError(f"Input file not found: {infile}")
+
+    if not infile_path.suffix.lower() == '.pdf':
+        raise ValueError(f"Input file must be a PDF: {infile}")
+
+    if output_format.lower() != 'markdown':
+        raise ValueError(f"Unsupported output format: {output_format}. Only 'markdown' is currently supported.")
+
+    outdir_path = Path(outdir)
+    outdir_path.mkdir(parents=True, exist_ok=True)
+
+    base_name = infile_path.stem
+
+    print(f"Processing: {infile}")
+    print(f"Output directory: {outdir}")
+
+    print("\n1. Converting PDF to DoclingDocument...")
+    converter = DocumentConverter()
+    result = converter.convert(str(infile_path))
+    docling_doc = result.document
+    print(f"   ✓ PDF converted successfully")
+
+    print("\n2. Detecting and masking PII...")
+    cloak_engine = CloakEngine()
+    mask_result = cloak_engine.mask_document(docling_doc)
+
+    entities_found = mask_result.entities_found
+    entities_masked = mask_result.entities_masked
+    print(f"   ✓ Found {entities_found} PII entities")
+    print(f"   ✓ Masked {entities_masked} entities")
+
+    masked_doc = mask_result.document
+    cloakmap = mask_result.cloakmap
+
+    print("\n3. Exporting documents to markdown...")
+
+    unmasked_md = docling_doc.export_to_markdown()
+    unmasked_path = outdir_path / f"{base_name}.unmasked.md"
+    with open(unmasked_path, 'w') as f:
+        f.write(unmasked_md)
+    print(f"   ✓ Saved unmasked document: {unmasked_path}")
+
+    if masked_doc and hasattr(masked_doc, 'export_to_markdown'):
+        masked_md = masked_doc.export_to_markdown()
+
+        # If export is empty, try alternative approach
+        if not masked_md and hasattr(masked_doc, 'texts') and masked_doc.texts:
+            masked_md = "# Masked Document\n\n"
+            masked_md += f"**Entities Found:** {entities_found}\n"
+            masked_md += f"**Entities Masked:** {entities_masked}\n\n"
+
+            for text_item in masked_doc.texts:
+                if hasattr(text_item, 'text'):
+                    masked_md += text_item.text + "\n\n"
+
+            # Add table if exists
+            if hasattr(masked_doc, 'tables') and masked_doc.tables:
+                for table in masked_doc.tables:
+                    if hasattr(table, 'to_markdown'):
+                        masked_md += "\n" + table.to_markdown() + "\n"
+    else:
+        masked_md = f"# Masked Document\n\n"
+        masked_md += f"**Entities Found:** {entities_found}\n"
+        masked_md += f"**Entities Masked:** {entities_masked}\n\n"
+        masked_md += "*Masked document export not available*\n"
+
+    masked_path = outdir_path / f"{base_name}.masked.md"
+    with open(masked_path, 'w') as f:
+        f.write(masked_md)
+    print(f"   ✓ Saved masked document: {masked_path}")
+
+    cloakmap_path = outdir_path / f"{base_name}.cloakmap.json"
+    if cloakmap:
+        try:
+            if hasattr(cloakmap, 'to_dict'):
+                cloakmap_dict = cloakmap.to_dict()
+            elif hasattr(cloakmap, '__dict__'):
+                cloakmap_dict = vars(cloakmap)
+            else:
+                cloakmap_dict = {
+                    "entities_found": entities_found,
+                    "entities_masked": entities_masked
+                }
+
+            with open(cloakmap_path, 'w') as f:
+                json.dump(cloakmap_dict, f, indent=2, default=str)
+            print(f"   ✓ Saved cloakmap: {cloakmap_path}")
+        except Exception as e:
+            print(f"   ⚠ Could not save cloakmap: {e}")
+
+    print(f"\n✅ Processing complete!")
+    print(f"   Output files:")
+    print(f"   - {unmasked_path}")
+    print(f"   - {masked_path}")
+    if cloakmap_path.exists():
+        print(f"   - {cloakmap_path}")
+
+def main():
+    """Main entry point for the CLI."""
+    arguments = docopt(__doc__, version=f"PII Cloak {__version__}")
+
+    if arguments['mask']:
+        try:
+            process_pdf(
+                infile=arguments['--infile'],
+                output_format=arguments['--output-format'],
+                outdir=arguments['--outdir']
+            )
+        except Exception as e:
+            print(f"\n❌ Error: {e}")
+            return 1
+
+    return 0
+
+if __name__ == '__main__':
+    exit(main())

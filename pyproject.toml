@@ -1,0 +1,8 @@
+[project]
+name = "testcloak"
+version = "0.1.0"
+
+dependencies = [
+    "cloakpivot @ git+https://github.com/hernamesbarbara/cloakpivot.git@main",
+    "docopt>=0.6.2"
+]
