@@ -67,9 +67,9 @@ def process_pdf(infile, output_format, outdir, strategy="redact"):
         policy = MaskingPolicy(
             default_strategy=Strategy(
                 kind=StrategyKind.SURROGATE,
-                parameters={}
+                parameters={"seed": "testcloak-consistent"}  # Seed goes in parameters
             ),
-            seed="testcloak-consistent-seed"  # For reproducibility
+            seed="testcloak-consistent"  # For reproducibility
         )
         cloak_engine = CloakEngine(default_policy=policy)
     else:

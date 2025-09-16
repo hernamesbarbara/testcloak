@@ -35,7 +35,7 @@ python pii-cloak mask --infile data/pdf/email.pdf --output-format markdown --out
 
 ### Available Strategies
 - `redact` (default): Replaces PII with static placeholders like `[NAME]`, `[EMAIL]`, `[DATE]`
-- `replace`: Replaces PII with masked characters (currently uses asterisks)
+- `replace`: Replaces PII with realistic fake data using Faker (e.g., "John Doe" → "Alex Garcia")
 
 ## Example Output
 
@@ -116,15 +116,15 @@ PS - here are the remaining [DATE] you asked for :)
 
 ---------- Forwarded message ----------
 
-From: ***************** <*******************>
+From: Alex Garcia <zirjtsp@example.com>
 
-Date: ************************* at ************
+Date: Rocmrer, Lswkyfoga 3 8938 at 05:08 FX TWM
 
 Subject: Re: FYI emailing with from inness robins
 
-To: *************** <*********************>
+To: Casey Smith <ockdnfgbv@example.edu>
 
-Hi ******,
+Hi Morgan,
 
 I'd definitely like to meet Inness if you think she'd be open to meeting! Thanks so so much for pounding the pavement so much for me here.
 
@@ -132,13 +132,13 @@ Best,
 
 Cameron
 
-PS - here are the remaining *********** you asked for :)
+PS - here are the remaining 1 janvpacsa you asked for :)
 
-| surname   | first name   | birthdate        |
-|-----------|--------------|------------------|
-| White     | Johnson      | **********       |
-| Borden    | Ashley       | **********       |
-| Green     | Marjorie     | **********       |
+| surname   | first name   | birthdate     |
+|-----------|--------------|---------------|
+| White     | Johnson      | 1620-73-81    |
+| Borden    | Ashley       | 1338-90-33    |
+| Green     | Marjorie     | 4590-94-24    |
 ```
 
 ## What Gets Masked
@@ -173,10 +173,12 @@ The script generates three files per strategy:
 - [CloakPivot](https://github.com/hernamesbarbara/cloakpivot) - PII detection and masking
 - [Presidio](https://github.com/microsoft/presidio) - PII detection engine (via CloakPivot)
 
-## Known Limitations
+## Known Issues
 
-- The `replace` strategy currently uses asterisks instead of realistic fake data due to a limitation in the CloakPivot/Presidio integration. Future versions may support realistic fake data generation using libraries like Faker.
+1. **Table Cell Masking**: Names in tables are detected as PII but the table cells themselves are not updated with masked values. This has been reported to CloakPivot for enhancement.
 
-## License
+## Recent Improvements ✅
 
-This is a test repository for demonstration purposes.
+- **FIXED**: Surrogate strategy now generates realistic fake data using Faker instead of asterisks
+- **FIXED**: Seed parameter is now working for deterministic fake data generation
+- **ENHANCED**: Replace strategy produces high-quality synthetic data that preserves format and context
