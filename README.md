@@ -40,7 +40,7 @@ python pii-cloak mask \
   --strategy replace
 ```
 
-> 📄 **Sample File**: The examples above use [`data/pdf/email.pdf`](data/pdf/email.pdf) - a test document containing various PII types including names, emails, dates, and a table with personal information.
+> 📄 **Sample File**: The examples above use <a href="data/pdf/email.pdf" target="_blank">`data/pdf/email.pdf`</a> - a test document containing various PII types including names, emails, dates, and a table with personal information.
 
 ### Available Strategies
 - `redact` (default): Replaces PII with static placeholders like `[NAME]`, `[EMAIL]`, `[DATE]`
